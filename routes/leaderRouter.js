@@ -16,7 +16,7 @@ leaderRouter
   .get((req, res, next) => {
     res.end('Will send all the leaders to you!');
   })
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyAdmin, (req, res, next) => {
     res.end(
       'Will add the leader: ' +
         req.body.name +
@@ -24,11 +24,11 @@ leaderRouter
         req.body.description
     );
   })
-  .put(authenticate.verifyUser, (req, res, next) => {
+  .put(authenticate.verifyAdmin, (req, res, next) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /leaders');
   })
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyAdmin, (req, res, next) => {
     res.end('Deleting all leaders');
   });
 
@@ -39,11 +39,11 @@ leaderRouter
       'Will send details of the leader: ' + req.params.leaderId + ' to you!'
     );
   })
-  .post(authenticate.verifyUser, (req, res, next) => {
+  .post(authenticate.verifyAdmin, (req, res, next) => {
     res.statusCode = 403;
     res.end('POST operation not supported on /leaders/' + req.params.leaderId);
   })
-  .put(authenticate.verifyUser, (req, res, next) => {
+  .put(authenticate.verifyAdmin, (req, res, next) => {
     res.write('Updating the leader: ' + req.params.leaderId + '\n');
     res.end(
       'Will update the leader: ' +
@@ -52,7 +52,7 @@ leaderRouter
         req.body.description
     );
   })
-  .delete(authenticate.verifyUser, (req, res, next) => {
+  .delete(authenticate.verifyAdmin, (req, res, next) => {
     res.end('Deleting leader: ' + req.params.leaderId);
   });
 
