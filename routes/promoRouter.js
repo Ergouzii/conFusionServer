@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('./cors');
 var authenticate = require('../authenticate');
 
 const promoRouter = express.Router();
@@ -13,10 +14,13 @@ promoRouter
     res.setHeader('Content-Type', 'text/plain');
     next();
   })
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => {
+    res.sendStatus(200);
+  })
+  .get(cors.cors, (req, res, next) => {
     res.end('Will send all the promotions to you!');
   })
-  .post(authenticate.verifyAdmin, (req, res, next) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end(
       'Will add the promotion: ' +
         req.body.name +
@@ -24,28 +28,31 @@ promoRouter
         req.body.description
     );
   })
-  .put(authenticate.verifyAdmin, (req, res, next) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /promotions');
   })
-  .delete(authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end('Deleting all promotions');
   });
 
 promoRouter
   .route('/:promoId')
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => {
+    res.sendStatus(200);
+  })
+  .get(cors.cors, (req, res, next) => {
     res.end(
       'Will send details of the promotion: ' + req.params.promoId + ' to you!'
     );
   })
-  .post(authenticate.verifyAdmin, (req, res, next) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 403;
     res.end(
       'POST operation not supported on /promotions/' + req.params.promoId
     );
   })
-  .put(authenticate.verifyAdmin, (req, res, next) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.write('Updating the promotion: ' + req.params.promoId + '\n');
     res.end(
       'Will update the promotion: ' +
@@ -54,7 +61,7 @@ promoRouter
         req.body.description
     );
   })
-  .delete(authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end('Deleting promotion: ' + req.params.promoId);
   });
 

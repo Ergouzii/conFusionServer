@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('./cors');
 var authenticate = require('../authenticate');
 
 const leaderRouter = express.Router();
@@ -13,10 +14,13 @@ leaderRouter
     res.setHeader('Content-Type', 'text/plain');
     next();
   })
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => {
+    res.sendStatus(200);
+  })
+  .get(cors.cors, (req, res, next) => {
     res.end('Will send all the leaders to you!');
   })
-  .post(authenticate.verifyAdmin, (req, res, next) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end(
       'Will add the leader: ' +
         req.body.name +
@@ -24,26 +28,29 @@ leaderRouter
         req.body.description
     );
   })
-  .put(authenticate.verifyAdmin, (req, res, next) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 403;
     res.end('PUT operation not supported on /leaders');
   })
-  .delete(authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end('Deleting all leaders');
   });
 
 leaderRouter
   .route('/:leaderId')
-  .get((req, res, next) => {
+  .options(cors.corsWithOptions, (req, res) => {
+    res.sendStatus(200);
+  })
+  .get(cors.cors, (req, res, next) => {
     res.end(
       'Will send details of the leader: ' + req.params.leaderId + ' to you!'
     );
   })
-  .post(authenticate.verifyAdmin, (req, res, next) => {
+  .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.statusCode = 403;
     res.end('POST operation not supported on /leaders/' + req.params.leaderId);
   })
-  .put(authenticate.verifyAdmin, (req, res, next) => {
+  .put(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.write('Updating the leader: ' + req.params.leaderId + '\n');
     res.end(
       'Will update the leader: ' +
@@ -52,7 +59,7 @@ leaderRouter
         req.body.description
     );
   })
-  .delete(authenticate.verifyAdmin, (req, res, next) => {
+  .delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     res.end('Deleting leader: ' + req.params.leaderId);
   });
 
