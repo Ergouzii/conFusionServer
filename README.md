@@ -10,6 +10,7 @@ Tech | Function
 [Express.js](https://expressjs.com) | application framework
 [MongoDB](https://mongodb.com) | persistent data store
 [Mongoose](https://mongoosejs.com) | ODM (object-document mapper)
+[JsonWebToken](https://www.npmjs.com/package/jsonwebtoken) | Authentication
 
 ### Authentication
 
