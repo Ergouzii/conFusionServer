@@ -46,7 +46,7 @@ favoriteRouter
               (err) => next(err)
             );
           } else {
-            var hasNew = false;
+            const hasNew = false;
 
             for (i in req.body) {
               if (favorite.dishes.indexOf(req.body[i]._id) === -1) {
@@ -151,7 +151,7 @@ favoriteRouter
     Favorites.findOne({ user: req.user._id })
       .then(
         (favorite) => {
-          var index = favorite.dishes.indexOf(req.params.dishId);
+          const index = favorite.dishes.indexOf(req.params.dishId);
 
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/json');

@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const cors = require('./cors');
-var authenticate = require('../authenticate');
+const authenticate = require('../authenticate');
 
 const Dishes = require('../models/dishes');
 
@@ -177,7 +177,7 @@ dishRouter
       .then(
         (dish) => {
           if (dish != null) {
-            for (var i = dish.comments.length - 1; i >= 0; i--) {
+            for (const i = dish.comments.length - 1; i >= 0; i--) {
               dish.comments.id(dish.comments[i]._id).remove();
             }
             dish.save().then(
